@@ -1,6 +1,4 @@
 """
-Created on Fri Jan 17 08:22:31 2025
-
 Move cost estimators for reconfiguration and gate move steps.
 
 There are two main functions:
@@ -364,54 +362,4 @@ if __name__ == "__main__":
     print(gate_forward(
         state={Qubit(i):(i,0) for i in range(16)}, gates={(Qubit(i), Qubit(15-i)) for i in range(8)}
     ))
-    
-    
-`# Test random vs 2d structured configuration for a 2d layout (eg 2d Heisenberg model)
-nx = 16
-ny = 8
-ctr = 0
-state = {}
-
-for i in range(nx):
-    for j in range(ny):
-        state[Qubit(ctr)] = (i,j)
-        ctr += 1
-
-state_r = {val:key for key,val in state.items()}
-gates_vertical = []
-gates_vertical_b = []
-for i in range(nx):
-    for j in range(0,ny-1,2):
-        gates_vertical.append((state_r[(i,j)], state_r[(i,j+1)]))
-for i in range(nx):
-    for j in range(1,ny,2):
-        gates_vertical_b.append((state_r[(i,j)], state_r[(i,j-1)]))
-gates_horizontal = []
-gates_horizontal_b = []
-for i in range(0,nx-1,2):
-    for j in range(ny):
-        gates_horizontal.append((state_r[(i,j)], state_r[(i+1,j)]))
-for i in range(1,nx,2):
-    for j in range(ny):
-        gates_horizontal_b.append((state_r[(i,j)], state_r[(i-1,j)]))
-
-print("-- big test --")
-print("Structured:")
-print(gate_forward(state=state, gates=set(gates_horizontal)) +
-        gate_forward(state=state, gates=set(gates_horizontal_b)) +
-        gate_forward(state=state, gates=set(gates_vertical)) +
-        gate_forward(state=state, gates=set(gates_vertical_b)))
-
-print("Random:")
-for _ in range(10):
-    perm = np.random.permutation(nx*ny)
-    state_random = {}
-    for i in range(nx*ny):
-        state_random[Qubit(i)] = state[Qubit(perm[i])]
-    
-    print(gate_forward(state=state_random, gates=set(gates_horizontal))+
-            gate_forward(state=state_random, gates=set(gates_horizontal_b)) +
-            gate_forward(state=state_random, gates=set(gates_vertical)) +
-        gate_forward(state=state_random, gates=set(gates_vertical_b)))
-`
     
